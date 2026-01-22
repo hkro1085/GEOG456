@@ -7,7 +7,7 @@
         <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
         integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
         crossorigin=""></script>
-        <script src="./data/hike.js" ></script>
+        <script src="./hike.js" ></script>
     </head>
     <body>
     Map of Grayson Highlands State Park, VA
@@ -25,12 +25,14 @@
         }).addTo(map);
 
     L.marker([36.628322, -81.496889]).addTo(map)
-        .bindPopup('Grayson Highlands Little Pinacle Visitor Center')
+        .bindPopup('Grayson Highlands Little Pinacle Visitor Center' +
+    "<img src='https://live.staticflickr.com/7666/27329698803_2998951d81_b.jpg' width='150px'>"
+  )
         .openPopup();
     
     // custom icon
-    var centerIcon = L.icon({    
-        iconUrl: 'https://live.staticflickr.com/7666/27329698803_2998951d81_b.jpg',   
+    var ponyIcon = L.icon({    
+        iconUrl: 'https://static.vecteezy.com/system/resources/thumbnails/046/437/475/small/shetland-pony-side-view-black-isolated-on-transparent-background-free-png.png',   
         iconSize: [50,50], 
         popupAnchor: [0,0]
         });
@@ -40,7 +42,7 @@
 
     L.geoJSON(hike, {   // a
     pointToLayer: function (feature, latlng) { // b
-    return L.marker(latlng, {icon: centerIcon});}}) // c
+    return L.marker(latlng, {icon: ponyIcon});}}) // c
     .bindPopup(customPopup) // d
     .addTo(map); // 
     
