@@ -7,7 +7,7 @@
         <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
         integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
         crossorigin=""></script>
-        <script src="./data/hike.JS" ></script>
+        <script src="./data/hike.js" ></script>
     </head>
     <body>
     Map of Grayson Highlands State Park, VA
@@ -18,19 +18,19 @@
     </style>
     <script>  
 
-    var map = L.map('mapid').setView([-81.4966, 36.6286], 17);
+    var map = L.map('mapid').setView([36.628322, -81.496889], 17);
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         }).addTo(map);
 
-    L.marker([-81.4966, 36.6286 ]).addTo(map)
-        .bindPopup('Grayson Highlands Entrance')
+    L.marker([36.628322, -81.496889]).addTo(map)
+        .bindPopup('Grayson Highlands Little Pinacle Visitor Center')
         .openPopup();
     
     // custom icon
-    var entranceIcon = L.icon({    
-        iconUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/0d/Grayson_Highlands_Sign-27527.jpg/1280px-Grayson_Highlands_Sign-27527.jpg',   
+    var centerIcon = L.icon({    
+        iconUrl: 'https://live.staticflickr.com/7666/27329698803_2998951d81_b.jpg',   
         iconSize: [50,50], 
         popupAnchor: [0,0]
         });
@@ -40,7 +40,7 @@
 
     L.geoJSON(hike, {   // a
     pointToLayer: function (feature, latlng) { // b
-    return L.marker(latlng, {icon: ponyIcon});}}) // c
+    return L.marker(latlng, {icon: centerIcon});}}) // c
     .bindPopup(customPopup) // d
     .addTo(map); // 
     
