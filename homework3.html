@@ -1,0 +1,73 @@
+<html>
+    <head>
+        <title>Homework 3: Making a Leaflet Map with Layers</title>
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+        crossorigin=""/>
+        <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+        crossorigin=""></script>
+        <script src="./dentists.js" ></script>
+    </head>
+    <body>
+    Locations of various dentists in Claderdell, UK
+    Note: Only one dentist practice shown on the map is Independent care (indicated by the green circle using "if/else" fuction), 
+    all others are Primary care (indicated by the blue circles).
+     <br/>
+    <div id="mapid"></div>
+    
+    <style>
+        #mapid{ width: 600px; height: 500px; }
+    </style>
+    <script>  
+
+    var map = L.map('mapid').setView([53.72, -1.93], 11);
+
+    var osm =L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+    var esri = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+	attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'});
+    
+
+    function getCircleColor(dentistType){
+            if (dentistType >= "Primary Dental Care") {return 'blue'}
+            else if (dentistType >= "Independent Healthcare Org") {return 'green'}
+            else {return 'red'}
+        }
+
+    function myPopup(dentistType){
+        
+        var customPopup = "Dentist Type: " + dentistType + "<br/><img src='https://wp04-media.cdn.ihealthspot.com/wp-content/uploads/sites/313/2024/08/Family-Dentist-1-768x512.jpg?format=1500w' width='100px'/>";
+        return customPopup; 
+    }
+    
+    var myGeoJSON = L.geoJSON(dentists, {
+        pointToLayer: function (feature, latlng) {
+            var circleColor = getCircleColor(feature.properties.Type_Sector);
+            return L.circleMarker(latlng, {
+                radius: 8,
+                fillColor: circleColor,
+                color: '#000',
+                weight: 1,
+                opacity: 1,
+                fillOpacity: 1
+            }).bindPopup(myPopup(feature.properties.Type_Sector));
+        }
+    }).addTo(map);
+    
+
+    var baseMaps = {
+        "OpenStreetMap": osm,
+        "Esri World Imagery": esri};
+
+    var overlayMaps = {
+        "Dentists": myGeoJSON };
+    var layerControl = L.control.layers(baseMaps, overlayMaps).addTo(map);
+
+    osm.addTo(map);  // Set OpenStreetMap as the default base layer
+    myGeoJSON.addTo(map); 
+    </script>
+    </body>
+</html>
