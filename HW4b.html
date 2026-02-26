@@ -1,0 +1,61 @@
+<html>
+    <head>
+        <title>Homework 4: Finding a Dataset</title>
+        <script src="./movementBarriers.js"></script>
+    </head>
+    <style>
+    body {
+        background-color: rgb(247, 238, 247);
+    }
+
+    table {
+        font-family: serif, serif;
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    </style>
+
+    <body>
+    <p>The data displayed in this website is from the California Open Data Portal. It was downloaded in geoJSON format. This dataset represents all barriers identified statewide as of June 2024 and former barriers that have been remediated since 2020. I am interested in the intersection between land use/urban sprawl and wildlife corridoors, so I chose this dataset as a preliminary lead into this interestion.</p>
+
+    <p>Link to the dataset: <a href="https://data.ca.gov/dataset/wildlife-movement-barriers-cdfw-ds2867">Data</a>
+    Link to more information about the topic: <a href="https://wildlife.ca.gov/Conservation/Wildlife/Connectivity/Barriers">Info</a></p>
+
+    <table id="barrierTable">
+        <thead>
+            <tr>
+                <th>California County</th>
+                <th>Priority Level</th>
+            </tr>
+        </thead>
+        <tbody id="tableBody">
+        </tbody>
+    </table>
+
+    <script>
+        var body = document.getElementById("tableBody");
+        var length = data.features.length;
+
+        for (var i = 0; i < length; i++) {
+            var row = body.insertRow();
+            var county = data.features[i].properties.County;
+            var priority = data.features[i].properties.Priority_2022;
+
+            if (priority == "Top Priority Barrier") {
+                row.style.backgroundColor = "red";
+            } else if (priority == "Priority Barrier") {
+                row.style.backgroundColor = "orange";
+            } else if (priority == "Barrier") {
+                row.style.backgroundColor = "yellow";
+            } else if (priority == "Remediated") {
+                row.style.backgroundColor = "green";
+            }
+
+            row.insertCell(0).innerHTML = county;
+            row.insertCell(1).innerHTML = priority;
+        }
+    </script>
+
+    </body>
+</html>
