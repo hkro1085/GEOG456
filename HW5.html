@@ -1,0 +1,86 @@
+<html>
+    <head>
+        <title>Homework 5: California Wildlife Movement Barriers</title>
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+        crossorigin=""/>
+        <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+        crossorigin=""></script>
+        <script src="./movementBarriers.js"></script>
+    </head>
+    
+    <style>
+        #mapid { width: 700px; height: 800px; }
+        .slider { width: 550px; }
+        .tick-container {
+            display: flex;
+            justify-content: space-between;
+            width: 550px;
+            margin-top: 5px;}
+        .tick {
+           font-size: 12px;
+           color: #888;
+        }
+   
+    </style>
+
+    <body>
+    <h1>California Wildlife Movement Barriers</h1>
+    <h3> Inspiration and help with code was taken from the posted example: <a href="https://github.com/registerchilton/Geography456/blob/main/Northside/NorthsidePolygons.html" target="_blank">https://github.com/registerchilton/Geography456/blob/main/Northside/NorthsidePolygons.html</a> and previous HW examples. <br>
+        Limitations to this data include the fact that there are only 2 years of data available, so it is difficult to assess long-term trends, however an extention of this homeowrk could be pulling more barrier data to add temporal complexity. Overall this Visualization is meant to allow users to see which wildlife movement cooridoors need the most attention. <br>
+        
+    </h3>       
+    <h3>
+    Key: <br>
+    <FONT COLOR="RED">Red = Top Priority Barrier</FONT><br>
+    <FONT COLOR="ORANGE">Orange = Priority Barrier</FONT><br>
+    <FONT COLOR="YELLOW">Yellow = Barrier</FONT><br>
+    <FONT COLOR="GREEN">Green = Remediated</FONT><br>
+    <br>
+    </h3> 
+    Use this slider to see changes in priority classification between year 2020 and 2022. <br>
+    <br>
+    <input type="range" min="1" max="2" value="1" class="slider" id="slider" oninput="f()">
+        <div class="tick-container">
+              <span class="tick">2020</span>
+              <span class="tick">2022</span>
+        </div>
+
+    <div id="mapid"></div>
+
+    </body>
+
+    <script>
+        var map = L.map('mapid').setView([37.9, -119.26], 6); // coordinates for california 
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        var layerGroup = L.layerGroup().addTo(map);
+
+        function f() {
+            layerGroup.clearLayers();
+
+            var slider = document.getElementById('slider');
+            var year = (slider.value == "1") ? "Priority_2020" : "Priority_2022";
+
+            for (var i = 0; i < data.features.length; i++) {
+                var priority = data.features[i].properties[year];
+                var coords = data.features[i].geometry.coordinates;
+                var flipped = coords.map(function(c) { return [c[1], c[0]]; }); //this part i had to look up!! all my coordinates in movementBarriers.js were in the wrong format
+
+                var color;
+                if (priority == "Top Priority Barrier") { color = 'red'; }
+                else if (priority == "Priority Barrier") { color = 'orange'; }
+                else if (priority == "Barrier") { color = 'yellow'; }
+                else if (priority == "Remediated") { color = 'green'; }
+
+                L.polyline(flipped, {color: color, weight: 3}).addTo(layerGroup);
+            }
+        }
+        f();
+
+    </script>
+    </html>
